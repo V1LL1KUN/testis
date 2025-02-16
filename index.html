@@ -1,80 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Clicker App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            text-align: center;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #counter {
-            font-size: 36px;
-            margin: 20px 0;
-            color: #444;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>АБАЮДНАКОИН32</title>
+  <style>
+    /* Импорт мягкого шрифта с поддержкой кириллицы */
+    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none; /* Запрет выделения текста */
+      -webkit-user-select: none; /* Для Safari */
+      -moz-user-select: none; /* Для Firefox */
+      -ms-user-select: none; /* Для IE */
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #61dafb;
+      font-family: 'Comfortaa', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    header {
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+    }
+
+    .counter {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .coin-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      cursor: pointer;
+    }
+
+    .coin-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a8a, #1e40af);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease-in-out;
+    }
+
+    .coin-circle:active {
+      transform: scale(0.95);
+    }
+
+    .coin {
+      width: 80%;
+      height: 80%;
+      background-image: url('coin.png'); /* Замените на путь к вашей монете */
+      background-size: cover;
+      background-position: center;
+      border-radius: 50%;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 1.5rem;
+      animation: floatUp 1s ease-in-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+    }
+
+    .background-emoji {
+      position: absolute;
+      font-size: 1.2rem;
+      opacity: 0.3;
+      animation: jumpAndFade 2s ease-in-out forwards;
+    }
+
+    @keyframes jumpAndFade {
+      0% {
+        opacity: 0.3;
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Кликер в Telegram</h1>
-        <p id="counter">0</p>
-        <button onclick="incrementCounter()">Нажми меня!</button>
+  <header>
+    <h1>АБАЮДНАКОИН32</h1>
+  </header>
+  <div class="counter" id="counter">1488</div>
+  <div class="coin-container" id="coinContainer">
+    <div class="coin-circle">
+      <div class="coin"></div>
     </div>
+  </div>
 
-    <script>
-        let counter = 0;
+  <script>
+    const counterElement = document.getElementById('counter');
+    const coinContainer = document.getElementById('coinContainer');
+    let counter = 1488;
+    let clickCount = 0;
+    let lastClickTime = Date.now();
 
-        function incrementCounter() {
-            counter++;
-            document.getElementById('counter').textContent = counter;
+    // Обработка клика по монете
+    coinContainer.addEventListener('click', (event) => {
+      counter++;
+      counterElement.textContent = counter;
 
-            // Интеграция с Telegram Web App API
-            if (window.Telegram && Telegram.WebApp) {
-                Telegram.WebApp.MainButton.setText(`Счет: ${counter}`);
-                Telegram.WebApp.MainButton.show();
-                Telegram.WebApp.MainButton.onClick(() => {
-                    Telegram.WebApp.sendData(counter.toString());
-                });
-            }
-        }
+      // Создание эмодзи на месте клика
+      const emoji = document.createElement('div');
+      emoji.textContent = '🤙';
+      emoji.classList.add('emoji');
+      emoji.style.left = `${event.offsetX}px`;
+      emoji.style.top = `${event.offsetY}px`;
+      coinContainer.appendChild(emoji);
 
-        // Инициализация Telegram Web App
-        if (window.Telegram && Telegram.WebApp) {
-            Telegram.WebApp.ready();
-            Telegram.WebApp.expand();
-            Telegram.WebApp.MainButton.hide();
-        }
-    </script>
+      // Удаление эмодзи после завершения анимации
+      emoji.addEventListener('animationend', () => {
+        emoji.remove();
+      });
+
+      // Проверка интенсивности кликов
+      clickCount++;
+      const currentTime = Date.now();
+      if (currentTime - lastClickTime < 500 && clickCount >= 3) {
+        createBackgroundEmoji();
+        clickCount = 0; // Сброс счетчика кликов
+      }
+      lastClickTime = currentTime;
+    });
+
+    // Создание фонового эмодзи
+    function createBackgroundEmoji() {
+      const emoji = document.createElement('div');
+      emoji.textContent = '🤙';
+      emoji.classList.add('background-emoji');
+      emoji.style.left = `${Math.random() * window.innerWidth}px`;
+      emoji.style.top = `${Math.random() * window.innerHeight}px`;
+      document.body.appendChild(emoji);
+
+      // Удаление эмодзи после завершения анимации
+      emoji.addEventListener('animationend', () => {
+        emoji.remove();
+      });
+    }
+  </script>
 </body>
 </html>
