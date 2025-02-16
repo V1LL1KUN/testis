@@ -19,6 +19,7 @@
       -webkit-user-select: none; /* Для Safari */
       -moz-user-select: none; /* Для Firefox */
       -ms-user-select: none; /* Для IE */
+      -webkit-tap-highlight-color: transparent; /* Убирает подсветку при клике на мобильных устройствах */
     }
 
     body {
@@ -62,6 +63,7 @@
       width: 150px;
       height: 150px;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent; /* Убирает подсветку при клике на мобильных устройствах */
     }
 
     .coin-circle {
@@ -86,6 +88,7 @@
       background-size: cover;
       background-position: center;
       border-radius: 50%;
+      pointer-events: none; /* Отключает взаимодействие с самим спрайтом монеты */
     }
 
     .emoji {
@@ -128,79 +131,79 @@
   </style>
 </head>
 <body>
-<header>
-  <h1>АБАЮДНАКОИН32</h1>
-</header>
-<div class="counter" id="counter">1488</div>
-<div class="coin-container" id="coinContainer">
-  <div class="coin-circle">
-    <div class="coin"></div>
+  <header>
+    <h1>АБАЮДНАКОИН32</h1>
+  </header>
+  <div class="counter" id="counter">1488</div>
+  <div class="coin-container" id="coinContainer">
+    <div class="coin-circle">
+      <div class="coin"></div>
+    </div>
   </div>
-</div>
 
-<script>
-  const counterElement = document.getElementById('counter');
-  const coinContainer = document.getElementById('coinContainer');
-  let counter = 1488;
-  let clickCount = 0;
-  let lastClickTime = Date.now();
+  <script>
+    const counterElement = document.getElementById('counter');
+    const coinContainer = document.getElementById('coinContainer');
+    let counter = 1488;
+    let clickCount = 0;
+    let lastClickTime = Date.now();
 
-  // Обработка клика по монете
-  coinContainer.addEventListener('click', (event) => {
-    counter++;
-    counterElement.textContent = counter;
+    // Обработка клика по монете
+    coinContainer.addEventListener('click', (event) => {
+      counter++;
+      counterElement.textContent = counter;
 
-    // Вдавливание монеты при каждом клике
-    const coinCircle = document.querySelector('.coin-circle');
-    coinCircle.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-      coinCircle.style.transform = 'scale(1)';
-    }, 100);
+      // Вдавливание монеты при каждом клике
+      const coinCircle = document.querySelector('.coin-circle');
+      coinCircle.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        coinCircle.style.transform = 'scale(1)';
+      }, 100);
 
-    // Создание эмодзи в месте клика
-    const emoji = document.createElement('div');
-    emoji.textContent = '🤙';
-    emoji.classList.add('emoji');
+      // Создание эмодзи в месте клика
+      const emoji = document.createElement('div');
+      emoji.textContent = '🤙';
+      emoji.classList.add('emoji');
 
-    // Корректное позиционирование эмодзи
-    const rect = coinContainer.getBoundingClientRect();
-    const offsetX = event.clientX - rect.left - rect.width / 2;
-    const offsetY = event.clientY - rect.top - rect.height / 2;
+      // Корректное позиционирование эмодзи
+      const rect = coinContainer.getBoundingClientRect();
+      const offsetX = event.clientX - rect.left - rect.width / 2;
+      const offsetY = event.clientY - rect.top - rect.height / 2;
 
-    emoji.style.left = `${rect.width / 2 + offsetX}px`;
-    emoji.style.top = `${rect.height / 2 + offsetY}px`;
+      emoji.style.left = `${rect.width / 2 + offsetX}px`;
+      emoji.style.top = `${rect.height / 2 + offsetY}px`;
 
-    coinContainer.appendChild(emoji);
+      coinContainer.appendChild(emoji);
 
-    // Удаление эмодзи после завершения анимации
-    emoji.addEventListener('animationend', () => {
-      emoji.remove();
+      // Удаление эмодзи после завершения анимации
+      emoji.addEventListener('animationend', () => {
+        emoji.remove();
+      });
+
+      // Проверка интенсивности кликов
+      clickCount++;
+      const currentTime = Date.now();
+      if (currentTime - lastClickTime < 300 && clickCount >= 5) { // Ужесточенные условия
+        createBackgroundEmoji();
+        clickCount = 0; // Сброс счетчика кликов
+      }
+      lastClickTime = currentTime;
     });
 
-    // Проверка интенсивности кликов
-    clickCount++;
-    const currentTime = Date.now();
-    if (currentTime - lastClickTime < 300 && clickCount >= 5) { // Ужесточенные условия
-      createBackgroundEmoji();
-      clickCount = 0; // Сброс счетчика кликов
+    // Создание фонового эмодзи
+    function createBackgroundEmoji() {
+      const emoji = document.createElement('div');
+      emoji.textContent = '🤙';
+      emoji.classList.add('background-emoji');
+      emoji.style.left = `${Math.random() * window.innerWidth}px`;
+      emoji.style.top = `${Math.random() * window.innerHeight}px`;
+      document.body.appendChild(emoji);
+
+      // Удаление эмодзи после завершения анимации
+      emoji.addEventListener('animationend', () => {
+        emoji.remove();
+      });
     }
-    lastClickTime = currentTime;
-  });
-
-  // Создание фонового эмодзи
-  function createBackgroundEmoji() {
-    const emoji = document.createElement('div');
-    emoji.textContent = '🤙';
-    emoji.classList.add('background-emoji');
-    emoji.style.left = `${Math.random() * window.innerWidth}px`;
-    emoji.style.top = `${Math.random() * window.innerHeight}px`;
-    document.body.appendChild(emoji);
-
-    // Удаление эмодзи после завершения анимации
-    emoji.addEventListener('animationend', () => {
-      emoji.remove();
-    });
-  }
-</script>
+  </script>
 </body>
 </html>
