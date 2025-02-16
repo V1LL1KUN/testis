@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>АБАЮДНАКОИН32</title>
   <style>
-    /* Импорт мягкого шрифта с поддержкой кириллицы */
-    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+    /* Подключение локального шрифта Everlasting */
+    @font-face {
+      font-family: 'Everlasting';
+      src: url('Everlasting.ttf') format('truetype'); /* Убедитесь, что файл шрифта находится в той же папке */
+    }
 
     * {
       margin: 0;
@@ -21,13 +24,13 @@
     body {
       background-color: #0d1117;
       color: #61dafb;
-      font-family: 'Comfortaa', cursive;
+      font-family: 'Everlasting', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      overflow: hidden;
+      overflow: hidden; /* Запрет прокрутки страницы */
       position: relative;
     }
 
@@ -36,12 +39,17 @@
       top: 10px;
       width: 100%;
       text-align: center;
+      padding: 0 10px; /* Добавлен отступ для предотвращения выхода за рамки */
+      box-sizing: border-box;
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 2rem; /* Уменьшен размер шрифта для мобильных устройств */
       text-transform: uppercase;
       letter-spacing: 4px;
+      white-space: nowrap; /* Запрет переноса текста */
+      overflow: hidden; /* Обрезка текста, если он выходит за рамки */
+      text-overflow: ellipsis; /* Добавление многоточия при обрезке */
     }
 
     .counter {
@@ -60,7 +68,7 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: linear-gradient(135deg, #1e3a8a, #1e40af);
+      background: rgba(30, 58, 138, 0.5); /* Полупрозрачный круг */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -68,7 +76,7 @@
     }
 
     .coin-circle:active {
-      transform: scale(0.95);
+      transform: scale(0.95); /* Вдавливание монеты */
     }
 
     .coin {
@@ -120,65 +128,79 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>АБАЮДНАКОИН32</h1>
-  </header>
-  <div class="counter" id="counter">1488</div>
-  <div class="coin-container" id="coinContainer">
-    <div class="coin-circle">
-      <div class="coin"></div>
-    </div>
+<header>
+  <h1>АБАЮДНАКОИН32</h1>
+</header>
+<div class="counter" id="counter">1488</div>
+<div class="coin-container" id="coinContainer">
+  <div class="coin-circle">
+    <div class="coin"></div>
   </div>
+</div>
 
-  <script>
-    const counterElement = document.getElementById('counter');
-    const coinContainer = document.getElementById('coinContainer');
-    let counter = 1488;
-    let clickCount = 0;
-    let lastClickTime = Date.now();
+<script>
+  const counterElement = document.getElementById('counter');
+  const coinContainer = document.getElementById('coinContainer');
+  let counter = 1488;
+  let clickCount = 0;
+  let lastClickTime = Date.now();
 
-    // Обработка клика по монете
-    coinContainer.addEventListener('click', (event) => {
-      counter++;
-      counterElement.textContent = counter;
+  // Обработка клика по монете
+  coinContainer.addEventListener('click', (event) => {
+    counter++;
+    counterElement.textContent = counter;
 
-      // Создание эмодзи на месте клика
-      const emoji = document.createElement('div');
-      emoji.textContent = '🤙';
-      emoji.classList.add('emoji');
-      emoji.style.left = `${event.offsetX}px`;
-      emoji.style.top = `${event.offsetY}px`;
-      coinContainer.appendChild(emoji);
+    // Вдавливание монеты при каждом клике
+    const coinCircle = document.querySelector('.coin-circle');
+    coinCircle.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      coinCircle.style.transform = 'scale(1)';
+    }, 100);
 
-      // Удаление эмодзи после завершения анимации
-      emoji.addEventListener('animationend', () => {
-        emoji.remove();
-      });
+    // Создание эмодзи в месте клика
+    const emoji = document.createElement('div');
+    emoji.textContent = '🤙';
+    emoji.classList.add('emoji');
 
-      // Проверка интенсивности кликов
-      clickCount++;
-      const currentTime = Date.now();
-      if (currentTime - lastClickTime < 500 && clickCount >= 3) {
-        createBackgroundEmoji();
-        clickCount = 0; // Сброс счетчика кликов
-      }
-      lastClickTime = currentTime;
+    // Корректное позиционирование эмодзи
+    const rect = coinContainer.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left - rect.width / 2;
+    const offsetY = event.clientY - rect.top - rect.height / 2;
+
+    emoji.style.left = `${rect.width / 2 + offsetX}px`;
+    emoji.style.top = `${rect.height / 2 + offsetY}px`;
+
+    coinContainer.appendChild(emoji);
+
+    // Удаление эмодзи после завершения анимации
+    emoji.addEventListener('animationend', () => {
+      emoji.remove();
     });
 
-    // Создание фонового эмодзи
-    function createBackgroundEmoji() {
-      const emoji = document.createElement('div');
-      emoji.textContent = '🤙';
-      emoji.classList.add('background-emoji');
-      emoji.style.left = `${Math.random() * window.innerWidth}px`;
-      emoji.style.top = `${Math.random() * window.innerHeight}px`;
-      document.body.appendChild(emoji);
-
-      // Удаление эмодзи после завершения анимации
-      emoji.addEventListener('animationend', () => {
-        emoji.remove();
-      });
+    // Проверка интенсивности кликов
+    clickCount++;
+    const currentTime = Date.now();
+    if (currentTime - lastClickTime < 300 && clickCount >= 5) { // Ужесточенные условия
+      createBackgroundEmoji();
+      clickCount = 0; // Сброс счетчика кликов
     }
-  </script>
+    lastClickTime = currentTime;
+  });
+
+  // Создание фонового эмодзи
+  function createBackgroundEmoji() {
+    const emoji = document.createElement('div');
+    emoji.textContent = '🤙';
+    emoji.classList.add('background-emoji');
+    emoji.style.left = `${Math.random() * window.innerWidth}px`;
+    emoji.style.top = `${Math.random() * window.innerHeight}px`;
+    document.body.appendChild(emoji);
+
+    // Удаление эмодзи после завершения анимации
+    emoji.addEventListener('animationend', () => {
+      emoji.remove();
+    });
+  }
+</script>
 </body>
 </html>
