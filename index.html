@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кликер</title>
+    <title>Telegram Clicker App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,6 +23,7 @@
         }
         h1 {
             color: #333;
+            margin-bottom: 20px;
         }
         button {
             padding: 15px 30px;
@@ -46,7 +47,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Кликер</h1>
+        <h1>Кликер в Telegram</h1>
         <p id="counter">0</p>
         <button onclick="incrementCounter()">Нажми меня!</button>
     </div>
@@ -57,6 +58,22 @@
         function incrementCounter() {
             counter++;
             document.getElementById('counter').textContent = counter;
+
+            // Интеграция с Telegram Web App API
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.MainButton.setText(`Счет: ${counter}`);
+                Telegram.WebApp.MainButton.show();
+                Telegram.WebApp.MainButton.onClick(() => {
+                    Telegram.WebApp.sendData(counter.toString());
+                });
+            }
+        }
+
+        // Инициализация Telegram Web App
+        if (window.Telegram && Telegram.WebApp) {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+            Telegram.WebApp.MainButton.hide();
         }
     </script>
 </body>
