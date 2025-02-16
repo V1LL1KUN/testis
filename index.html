@@ -10,7 +10,6 @@
       font-family: 'Everlasting';
       src: url('Everlasting.ttf') format('truetype'); /* Убедитесь, что файл шрифта находится в той же папке */
     }
-
     * {
       margin: 0;
       padding: 0;
@@ -21,7 +20,6 @@
       -ms-user-select: none; /* Для IE */
       -webkit-tap-highlight-color: transparent; /* Убирает подсветку при клике на мобильных устройствах */
     }
-
     body {
       background-color: #0d1117;
       color: #61dafb;
@@ -34,7 +32,6 @@
       overflow: hidden; /* Запрет прокрутки страницы */
       position: relative;
     }
-
     header {
       position: absolute;
       top: 10px;
@@ -43,7 +40,6 @@
       padding: 0 10px; /* Добавлен отступ для предотвращения выхода за рамки */
       box-sizing: border-box;
     }
-
     h1 {
       font-size: 2rem; /* Уменьшен размер шрифта для мобильных устройств */
       text-transform: uppercase;
@@ -51,36 +47,34 @@
       white-space: nowrap; /* Запрет переноса текста */
       overflow: hidden; /* Обрезка текста, если он выходит за рамки */
       text-overflow: ellipsis; /* Добавление многоточия при обрезке */
+      text-shadow: 0 0 1px #61dafb, 0 0 2px #61dafb, 0 0 3px #61dafb; /* Неоновая подсветка */
     }
-
     .counter {
       font-size: 2rem;
       margin-bottom: 30px;
+      text-shadow: 0 0 1px #61dafb, 0 0 2px #61dafb, 0 0 3px #61dafb; /* Неоновая подсветка */
     }
-
     .coin-container {
       position: relative;
-      width: 150px;
-      height: 150px;
+      width: 180px; /* Увеличен размер контейнера */
+      height: 180px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent; /* Убирает подсветку при клике на мобильных устройствах */
     }
-
     .coin-circle {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: rgba(30, 58, 138, 0.5); /* Полупрозрачный круг */
+      background: rgba(19, 44, 124, 0.3); /* Полупрозрачный круг */
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.1s ease-in-out;
+      box-shadow: 0 0 20px #61dafb, 0 0 40px #61dafb, 0 0 60px #61dafb; /* Неоновая подсветка */
     }
-
     .coin-circle:active {
       transform: scale(0.95); /* Вдавливание монеты */
     }
-
     .coin {
       width: 80%;
       height: 80%;
@@ -90,13 +84,11 @@
       border-radius: 50%;
       pointer-events: none; /* Отключает взаимодействие с самим спрайтом монеты */
     }
-
     .emoji {
       position: absolute;
       font-size: 1.5rem;
       animation: floatUp 1s ease-in-out forwards;
     }
-
     @keyframes floatUp {
       0% {
         opacity: 1;
@@ -107,14 +99,12 @@
         transform: translateY(-50px);
       }
     }
-
     .background-emoji {
       position: absolute;
       font-size: 1.2rem;
       opacity: 0.3;
       animation: jumpAndFade 2s ease-in-out forwards;
     }
-
     @keyframes jumpAndFade {
       0% {
         opacity: 0.3;
@@ -128,82 +118,234 @@
         transform: translateY(-20px);
       }
     }
+
+    /* Магазин */
+    .shop-button {
+      position: fixed;
+      bottom: 20px;
+      right: 330px;
+      background: rgba(13, 17, 23, 1);
+      border: 2px solid #61dafb;
+      border-radius: 60px;
+      padding: 10px 30px;
+      font-size: 1.5rem;
+      color: #61dafb;
+      cursor: pointer;
+      box-shadow: 0 0 10px #61dafb, 0 0 20px #61dafb, 0 0 30px #61dafb;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .shop-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #61dafb, 0 0 40px #61dafb, 0 0 60px #61dafb;
+    }
+    .shop-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.00001);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.5s ease-in-out forwards;
+    }
+    .shop-modal.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    .shop-content {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 20px;
+      color: #61dafb;
+      text-align: center;
+      box-shadow: 0 0 20px #61dafb, 0 0 40px #61dafb, 0 0 60px #61dafb;
+    }
+    .shop-item {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #61dafb;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, background 0.2s ease-in-out;
+    }
+    .shop-item:hover {
+      transform: scale(1.05);
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 60px;
+      padding: 10px 20px;
+      color: #61dafb;
+      font-size: 1rem;
+      display: none;
+      box-shadow: 0 0 10px #61dafb, 0 0 20px #61dafb, 0 0 30px #61dafb;
+      animation: slideIn 0.5s ease-in-out forwards;
+    }
+    .notification.active {
+      display: block;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>АБАЮДНАКОИН32</h1>
-  </header>
-  <div class="counter" id="counter">1488</div>
-  <div class="coin-container" id="coinContainer">
-    <div class="coin-circle">
-      <div class="coin"></div>
-    </div>
+<header>
+  <h1>АБАЮДНАКОИН32💎</h1>
+</header>
+<div class="counter" id="counter">1488</div>
+<div class="coin-container" id="coinContainer">
+  <div class="coin-circle">
+    <div class="coin"></div>
   </div>
+</div>
 
-  <script>
-    const counterElement = document.getElementById('counter');
-    const coinContainer = document.getElementById('coinContainer');
-    let counter = 1488;
-    let clickCount = 0;
-    let lastClickTime = Date.now();
+<!-- Магазин -->
+<div class="shop-button" id="shopButton">🛒</div>
+<div class="shop-modal" id="shopModal">
+  <div class="shop-content">
+    <h2>Магазин улучшений</h2>
+    <div class="shop-item" data-cost="2000" data-value="5">⚡ +5 очков за клик (2K)</div>
+    <div class="shop-item" data-cost="10000" data-value="10">⚡ +10 очков за клик (10K)</div>
+    <div class="shop-item" data-cost="32000" data-value="50">⚡ +50 очков за клик (32K)</div>
+    <div class="shop-item" data-cost="100000" data-value="100">⚡ +100 очков за клик (100K)</div>
+    <button id="closeShop">Закрыть</button>
+  </div>
+</div>
 
-    // Обработка клика по монете
-    coinContainer.addEventListener('click', (event) => {
-      counter++;
-      counterElement.textContent = counter;
+<!-- Уведомления -->
+<div class="notification" id="notification"></div>
 
-      // Вдавливание монеты при каждом клике
-      const coinCircle = document.querySelector('.coin-circle');
-      coinCircle.style.transform = 'scale(0.95)';
-      setTimeout(() => {
-        coinCircle.style.transform = 'scale(1)';
-      }, 100);
+<script>
+  const counterElement = document.getElementById('counter');
+  const coinCircle = document.querySelector('.coin-circle');
+  const shopButton = document.getElementById('shopButton');
+  const shopModal = document.getElementById('shopModal');
+  const closeShop = document.getElementById('closeShop');
+  const notification = document.getElementById('notification');
 
-      // Создание эмодзи в месте клика
-      const emoji = document.createElement('div');
-      emoji.textContent = '🤙';
-      emoji.classList.add('emoji');
+  let counter = 1488;
+  let clickCount = 0;
+  let lastClickTime = Date.now();
+  let clickValue = 1;
 
-      // Корректное позиционирование эмодзи
-      const rect = coinContainer.getBoundingClientRect();
-      const offsetX = event.clientX - rect.left - rect.width / 2;
-      const offsetY = event.clientY - rect.top - rect.height / 2;
+  // Форматирование чисел
+  function formatNumber(num) {
+    if (num >= 1e12) return (num / 1e12).toFixed(1) + 'T';
+    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+    if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+    return num.toString();
+  }
 
-      emoji.style.left = `${rect.width / 2 + offsetX}px`;
-      emoji.style.top = `${rect.height / 2 + offsetY}px`;
+  // Показать уведомление
+  function showNotification(message, isSuccess = true) {
+    notification.textContent = message;
+    notification.classList.add('active');
+    setTimeout(() => {
+      notification.classList.remove('active');
+    }, 3000);
+  }
 
-      coinContainer.appendChild(emoji);
+  // Обработка клика по кругу
+  coinCircle.addEventListener('click', (event) => {
+    counter += clickValue;
+    counterElement.textContent = formatNumber(counter);
 
-      // Удаление эмодзи после завершения анимации
-      emoji.addEventListener('animationend', () => {
-        emoji.remove();
-      });
-
-      // Проверка интенсивности кликов
-      clickCount++;
-      const currentTime = Date.now();
-      if (currentTime - lastClickTime < 300 && clickCount >= 5) { // Ужесточенные условия
-        createBackgroundEmoji();
-        clickCount = 0; // Сброс счетчика кликов
-      }
-      lastClickTime = currentTime;
+    // Создание эмодзи в месте клика
+    const emoji = document.createElement('div');
+    emoji.textContent = '🤙';
+    emoji.classList.add('emoji');
+    const rect = coinCircle.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left - rect.width / 2;
+    const offsetY = event.clientY - rect.top - rect.height / 2;
+    emoji.style.left = `${rect.width / 2 + offsetX}px`;
+    emoji.style.top = `${rect.height / 2 + offsetY}px`;
+    coinCircle.appendChild(emoji);
+    emoji.addEventListener('animationend', () => {
+      emoji.remove();
     });
 
-    // Создание фонового эмодзи
-    function createBackgroundEmoji() {
-      const emoji = document.createElement('div');
-      emoji.textContent = '🤙';
-      emoji.classList.add('background-emoji');
-      emoji.style.left = `${Math.random() * window.innerWidth}px`;
-      emoji.style.top = `${Math.random() * window.innerHeight}px`;
-      document.body.appendChild(emoji);
-
-      // Удаление эмодзи после завершения анимации
-      emoji.addEventListener('animationend', () => {
-        emoji.remove();
-      });
+    // Проверка интенсивности кликов
+    clickCount++;
+    const currentTime = Date.now();
+    if (currentTime - lastClickTime < 300 && clickCount >= 10) {
+      createBackgroundEmojis(clickCount);
+      clickCount = 0;
     }
-  </script>
+    lastClickTime = currentTime;
+  });
+
+  // Создание фоновых эмодзи
+  function createBackgroundEmojis(clickCount) {
+    const emojiCount = Math.min(Math.floor(clickCount / 0.01), 50);
+    for (let i = 0; i < emojiCount; i++) {
+      setTimeout(() => {
+        const emoji = document.createElement('div');
+        emoji.textContent = Math.random() > 0.5 ? '💎' : '🤙';
+        emoji.classList.add('background-emoji');
+        emoji.style.left = `${Math.random() * window.innerWidth}px`;
+        emoji.style.top = `${Math.random() * window.innerHeight}px`;
+        const randomScale = 0.8 + Math.random() * 0.4;
+        const randomDuration = 1 + Math.random() * 2;
+        emoji.style.fontSize = `${1.2 * randomScale}rem`;
+        emoji.style.animationDuration = `${randomDuration}s`;
+        document.body.appendChild(emoji);
+        emoji.addEventListener('animationend', () => {
+          emoji.remove();
+        });
+      }, i * 50);
+    }
+  }
+
+  // Открытие магазина
+  shopButton.addEventListener('click', () => {
+    shopModal.classList.add('active');
+  });
+
+  // Закрытие магазина
+  closeShop.addEventListener('click', () => {
+    shopModal.classList.remove('active');
+  });
+
+  // Покупка улучшений
+  document.querySelectorAll('.shop-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const cost = parseInt(item.getAttribute('data-cost'));
+      const value = parseInt(item.getAttribute('data-value'));
+
+      if (counter >= cost) {
+        counter -= cost;
+        clickValue += value;
+        counterElement.textContent = formatNumber(counter);
+        showNotification(`Вы купили улучшение ⚡ +${value} очков за клик ✅`);
+      } else {
+        showNotification('У вас не хватает денег ❌', false);
+      }
+    });
+  });
+</script>
 </body>
 </html>
