@@ -350,46 +350,37 @@
     document.getElementById('current-energy').textContent = energy;
   }
 
-  // Добавляем обработчик клика на монету
-  document.querySelector('.coin').addEventListener('click', (event) => {
-    if (energy > 0) {
-      // Увеличиваем счетчик
-      count += 1;
-      energy -= 1; // Отнимаем 1 единицу энергии за клик
+ // Добавляем обработчик клика на монету
+document.querySelector('.coin').addEventListener('click', (event) => {
+  if (energy > 0) {
+    // Увеличиваем счетчик и уменьшаем энергию
+    count += 1;
+    energy -= 1;
 
-      // Обновляем текст счетчика с форматированием числа
-      document.getElementById('counter').textContent = formatNumber(count);
+    // Обновляем текст счетчика
+    document.getElementById('counter').textContent = formatNumber(count);
+    updateEnergyBar();
 
-      // Обновляем прогресс-бар
-      updateEnergyBar();
+    // Вибрация устройства
+    vibrateDevice(50); // Вибрация длится 50 мс
 
-      // Получаем координаты клика
-      const { clientX, clientY } = event;
+    // Создаем анимацию эмодзи
+    const { clientX, clientY } = event;
+    const emojiElement = document.createElement('div');
+    emojiElement.classList.add('emoji');
+    emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    emojiElement.style.left = `${clientX}px`;
+    emojiElement.style.top = `${clientY}px`;
+    emojiElement.style.setProperty('--direction', Math.random() > 0.5 ? '50px' : '-50px');
 
-      // Создаем новый элемент для эмодзи
-      const emojiElement = document.createElement('div');
-      emojiElement.classList.add('emoji');
+    document.body.appendChild(emojiElement);
 
-      // Выбираем случайное эмодзи из массива
-      emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
-      // Устанавливаем позицию эмодзи
-      emojiElement.style.left = `${clientX}px`;
-      emojiElement.style.top = `${clientY}px`;
-
-      // Определяем направление движения (слева или справа)
-      const direction = Math.random() > 0.5 ? '50px' : '-50px';
-      emojiElement.style.setProperty('--direction', direction);
-
-      // Добавляем эмодзи на страницу
-      document.body.appendChild(emojiElement);
-
-      // Удаляем эмодзи после завершения анимации
-      emojiElement.addEventListener('animationend', () => {
-        emojiElement.remove();
-      });
-    }
-  });
+    // Удаляем эмодзи после завершения анимации
+    emojiElement.addEventListener('animationend', () => {
+      emojiElement.remove();
+    });
+  }
+});
 
   // Восстановление энергии каждые 3 секунды
   setInterval(() => {
