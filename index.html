@@ -252,140 +252,138 @@
 </div>
 <script>
     // Массив с космическими эмодзи
-    const emojis = ['⚡', '🔥'];
-    // Инициализация счетчика
-    let count = 32000;
-    let energy = 5000;
+const emojis = ['⚡', '🔥'];
+// Инициализация счетчика
+let count = 32000;
+let energy = 5000;
 
-    // Функция для форматирования числа с запятыми
-    function formatNumber(num) {
-        return num.toLocaleString();
-    }
+// Функция для форматирования числа с запятыми
+function formatNumber(num) {
+    return num.toLocaleString();
+}
 
-    // Обновление значения энергии в прогресс-баре
-    function updateEnergyBar() {
-        const energyBar = document.getElementById('energy-bar');
-        const energyBarTail = document.getElementById('energy-bar-tail');
-        const percentage = (energy / 5000) * 100;
-        // Обновляем хвостик перед основным баром
-        energyBarTail.style.width = `${Math.max(percentage + 10, 100)}%`; // Добавляем "хвостик"
-        // Обновляем основной прогресс-бар
-        energyBar.style.width = `${percentage}%`;
-        // Обновляем текст текущей энергии
-        document.getElementById('current-energy').textContent = energy;
-    }
+// Обновление значения энергии в прогресс-баре
+function updateEnergyBar() {
+    const energyBar = document.getElementById('energy-bar');
+    const energyBarTail = document.getElementById('energy-bar-tail');
+    const percentage = (energy / 5000) * 100;
+    // Обновляем хвостик перед основным баром
+    energyBarTail.style.width = `${Math.max(percentage + 10, 100)}%`; // Добавляем "хвостик"
+    // Обновляем основной прогресс-бар
+    energyBar.style.width = `${percentage}%`;
+    // Обновляем текст текущей энергии
+    document.getElementById('current-energy').textContent = energy;
+}
 
-    // Получаем элемент монетки
-    const coinElement = document.querySelector('.coin');
+// Получаем элемент монетки
+const coinElement = document.querySelector('.coin');
 
-    // Словарь для отслеживания обработанных касаний
-    const processedTouches = new Set();
+// Словарь для отслеживания обработанных касаний
+const processedTouches = new Set();
 
-    // Очередь для обработки касаний
-    const touchQueue = [];
-    let isProcessingQueue = false;
+// Очередь для обработки касаний
+const touchQueue = [];
+let isProcessingQueue = false;
 
-    // Функция для обработки очереди касаний
-    function processTouchQueue() {
-        if (isProcessingQueue || touchQueue.length === 0) return;
+// Функция для обработки очереди касаний
+function processTouchQueue() {
+    if (isProcessingQueue || touchQueue.length === 0) return;
 
-        isProcessingQueue = true;
+    isProcessingQueue = true;
 
-        // Берем первое касание из очереди
-        const { clientX, clientY } = touchQueue.shift();
+    // Берем первое касание из очереди
+    const { clientX, clientY } = touchQueue.shift();
 
-        // Увеличиваем счетчик
-        count += 1;
-        energy -= 1; // Отнимаем 1 единицу энергии за касание
-        // Обновляем текст счетчика с форматированием числа
-        document.getElementById('counter').textContent = formatNumber(count);
-        // Обновляем прогресс-бар
-        updateEnergyBar();
-
-        // Создаем новый элемент для эмодзи
-        const emojiElement = document.createElement('div');
-        emojiElement.classList.add('emoji');
-        // Выбираем случайное эмодзи из массива
-        emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        // Устанавливаем позицию эмодзи
-        emojiElement.style.left = `${clientX}px`;
-        emojiElement.style.top = `${clientY}px`;
-        // Определяем направление движения (слева или справа)
-        const direction = Math.random() > 0.5 ? '50px' : '-50px';
-        emojiElement.style.setProperty('--direction', direction);
-
-        // Принудительный перезапуск анимации
-        void emojiElement.offsetWidth; // Триггер перерисовки
-        emojiElement.classList.remove('emoji'); // Удаляем класс
-        setTimeout(() => {
-            emojiElement.classList.add('emoji'); // Возвращаем класс
-        }, 0);
-
-        // Добавляем эмодзи на страницу
-        document.body.appendChild(emojiElement);
-        // Удаляем эмодзи после завершения анимации
-        emojiElement.addEventListener('animationend', () => {
-            emojiElement.remove();
-        });
-
-        // Разблокируем обработку очереди
-        isProcessingQueue = false;
-
-        // Если в очереди еще есть касания, продолжаем обработку
-        if (touchQueue.length > 0) {
-            requestAnimationFrame(processTouchQueue);
-        }
-    }
-
-    // Обработчик для мультитача
-    document.addEventListener('touchstart', (event) => {
-        // Проходим по всем касаниям
-        Array.from(event.touches).forEach((touch) => {
-            const touchId = touch.identifier; // Уникальный ID касания
-
-            // Проверяем, не было ли это касание уже обработано
-            if (processedTouches.has(touchId)) return;
-
-            // Проверяем, находится ли касание внутри монетки
-            const { clientX, clientY } = touch;
-            const coinRect = coinElement.getBoundingClientRect(); // Получаем размеры и позицию монетки
-
-            const isInsideCoin =
-                clientX >= coinRect.left &&
-                clientX <= coinRect.right &&
-                clientY >= coinRect.top &&
-                clientY <= coinRect.bottom;
-
-            if (isInsideCoin && energy > 0) {
-                // Отмечаем касание как обработанное
-                processedTouches.add(touchId);
-
-                // Добавляем касание в очередь
-                touchQueue.push({ clientX, clientY });
-
-                // Начинаем обработку очереди
-                processTouchQueue();
-            }
-        });
-    });
-
-    // Очищаем обработанные касания при завершении касания
-    document.addEventListener('touchend', (event) => {
-        Array.from(event.changedTouches).forEach((touch) => {
-            processedTouches.delete(touch.identifier); // Удаляем ID завершенного касания
-        });
-    });
-
-    // Восстановление энергии каждые 3 секунды
-    setInterval(() => {
-        if (energy < 5000) {
-            energy += 1;
-            updateEnergyBar();
-        }
-    }, 3000);
-
-    // Инициализация прогресс-бара
+    // Увеличиваем счетчик
+    count += 1;
+    energy -= 1; // Отнимаем 1 единицу энергии за касание
+    // Обновляем текст счетчика с форматированием числа
+    document.getElementById('counter').textContent = formatNumber(count);
+    // Обновляем прогресс-бар
     updateEnergyBar();
+
+    // Создаем новый элемент для эмодзи
+    const emojiElement = document.createElement('div');
+    emojiElement.classList.add('emoji');
+    // Выбираем случайное эмодзи из массива
+    emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    // Устанавливаем позицию эмодзи
+    emojiElement.style.left = `${clientX}px`;
+    emojiElement.style.top = `${clientY}px`;
+    // Определяем направление движения (слева или справа)
+    const direction = Math.random() > 0.5 ? '50px' : '-50px';
+    emojiElement.style.setProperty('--direction', direction);
+
+    // Принудительный перезапуск анимации через изменение animation-name
+    emojiElement.style.animationName = 'none'; // Отключаем анимацию
+    void emojiElement.offsetWidth; // Триггер перерисовки
+    emojiElement.style.animationName = ''; // Возвращаем анимацию
+
+    // Добавляем эмодзи на страницу
+    document.body.appendChild(emojiElement);
+    // Удаляем эмодзи после завершения анимации
+    emojiElement.addEventListener('animationend', () => {
+        emojiElement.remove();
+    });
+
+    // Разблокируем обработку очереди
+    isProcessingQueue = false;
+
+    // Если в очереди еще есть касания, продолжаем обработку
+    if (touchQueue.length > 0) {
+        requestAnimationFrame(processTouchQueue);
+    }
+}
+
+// Обработчик для мультитача
+document.addEventListener('touchstart', (event) => {
+    // Проходим по всем касаниям
+    Array.from(event.touches).forEach((touch) => {
+        const touchId = touch.identifier; // Уникальный ID касания
+
+        // Проверяем, не было ли это касание уже обработано
+        if (processedTouches.has(touchId)) return;
+
+        // Проверяем, находится ли касание внутри монетки
+        const { clientX, clientY } = touch;
+        const coinRect = coinElement.getBoundingClientRect(); // Получаем размеры и позицию монетки
+
+        const isInsideCoin =
+            clientX >= coinRect.left &&
+            clientX <= coinRect.right &&
+            clientY >= coinRect.top &&
+            clientY <= coinRect.bottom;
+
+        if (isInsideCoin && energy > 0) {
+            // Отмечаем касание как обработанное
+            processedTouches.add(touchId);
+
+            // Добавляем касание в очередь
+            touchQueue.push({ clientX, clientY });
+
+            // Начинаем обработку очереди
+            processTouchQueue();
+        }
+    });
+});
+
+// Очищаем обработанные касания при завершении касания
+document.addEventListener('touchend', (event) => {
+    Array.from(event.changedTouches).forEach((touch) => {
+        processedTouches.delete(touch.identifier); // Удаляем ID завершенного касания
+    });
+});
+
+// Восстановление энергии каждые 3 секунды
+setInterval(() => {
+    if (energy < 5000) {
+        energy += 1;
+        updateEnergyBar();
+    }
+}, 3000);
+
+// Инициализация прогресс-бара
+updateEnergyBar();
 </script>
 </body>
 </html>
