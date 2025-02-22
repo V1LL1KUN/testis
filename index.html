@@ -252,7 +252,7 @@
 </div>
 <script>
     // Массив с космическими эмодзи
-    const emojis = ['⚡', '️🔥'];
+    const emojis = ['⚡', '🔥'];
     // Инициализация счетчика
     let count = 32000;
     let energy = 5000;
@@ -267,56 +267,49 @@
         const energyBar = document.getElementById('energy-bar');
         const energyBarTail = document.getElementById('energy-bar-tail');
         const percentage = (energy / 5000) * 100;
-
         // Обновляем хвостик перед основным баром
         energyBarTail.style.width = `${Math.max(percentage + 10, 100)}%`; // Добавляем "хвостик"
-
         // Обновляем основной прогресс-бар
         energyBar.style.width = `${percentage}%`;
-
         // Обновляем текст текущей энергии
         document.getElementById('current-energy').textContent = energy;
     }
 
-    // Добавляем обработчик клика на монету
-    document.querySelector('.coin').addEventListener('click', (event) => {
-        if (energy > 0) {
-            // Увеличиваем счетчик
-            count += 1;
-            energy -= 1; // Отнимаем 1 единицу энергии за клик
+    // Обработчик для мультитача
+    document.addEventListener('touchstart', (event) => {
+        // Проходим по всем касаниям
+        Array.from(event.touches).forEach((touch) => {
+            if (energy > 0) {
+                // Увеличиваем счетчик
+                count += 1;
+                energy -= 1; // Отнимаем 1 единицу энергии за касание
+                // Обновляем текст счетчика с форматированием числа
+                document.getElementById('counter').textContent = formatNumber(count);
+                // Обновляем прогресс-бар
+                updateEnergyBar();
 
-            // Обновляем текст счетчика с форматированием числа
-            document.getElementById('counter').textContent = formatNumber(count);
+                // Получаем координаты касания
+                const { clientX, clientY } = touch;
 
-            // Обновляем прогресс-бар
-            updateEnergyBar();
-
-            // Получаем координаты клика
-            const { clientX, clientY } = event;
-
-            // Создаем новый элемент для эмодзи
-            const emojiElement = document.createElement('div');
-            emojiElement.classList.add('emoji');
-
-            // Выбираем случайное эмодзи из массива
-            emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
-            // Устанавливаем позицию эмодзи
-            emojiElement.style.left = `${clientX}px`;
-            emojiElement.style.top = `${clientY}px`;
-
-            // Определяем направление движения (слева или справа)
-            const direction = Math.random() > 0.5 ? '50px' : '-50px';
-            emojiElement.style.setProperty('--direction', direction);
-
-            // Добавляем эмодзи на страницу
-            document.body.appendChild(emojiElement);
-
-            // Удаляем эмодзи после завершения анимации
-            emojiElement.addEventListener('animationend', () => {
-                emojiElement.remove();
-            });
-        }
+                // Создаем новый элемент для эмодзи
+                const emojiElement = document.createElement('div');
+                emojiElement.classList.add('emoji');
+                // Выбираем случайное эмодзи из массива
+                emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                // Устанавливаем позицию эмодзи
+                emojiElement.style.left = `${clientX}px`;
+                emojiElement.style.top = `${clientY}px`;
+                // Определяем направление движения (слева или справа)
+                const direction = Math.random() > 0.5 ? '50px' : '-50px';
+                emojiElement.style.setProperty('--direction', direction);
+                // Добавляем эмодзи на страницу
+                document.body.appendChild(emojiElement);
+                // Удаляем эмодзи после завершения анимации
+                emojiElement.addEventListener('animationend', () => {
+                    emojiElement.remove();
+                });
+            }
+        });
     });
 
     // Восстановление энергии каждые 3 секунды
