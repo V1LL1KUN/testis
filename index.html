@@ -281,6 +281,54 @@
     // Словарь для отслеживания обработанных касаний
     const processedTouches = new Set();
 
+    // Очередь для обработки касаний
+    const touchQueue = [];
+    let isProcessingQueue = false;
+
+    // Функция для обработки очереди касаний
+    function processTouchQueue() {
+        if (isProcessingQueue || touchQueue.length === 0) return;
+
+        isProcessingQueue = true;
+
+        // Берем первое касание из очереди
+        const { clientX, clientY } = touchQueue.shift();
+
+        // Увеличиваем счетчик
+        count += 1;
+        energy -= 1; // Отнимаем 1 единицу энергии за касание
+        // Обновляем текст счетчика с форматированием числа
+        document.getElementById('counter').textContent = formatNumber(count);
+        // Обновляем прогресс-бар
+        updateEnergyBar();
+
+        // Создаем новый элемент для эмодзи
+        const emojiElement = document.createElement('div');
+        emojiElement.classList.add('emoji');
+        // Выбираем случайное эмодзи из массива
+        emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        // Устанавливаем позицию эмодзи
+        emojiElement.style.left = `${clientX}px`;
+        emojiElement.style.top = `${clientY}px`;
+        // Определяем направление движения (слева или справа)
+        const direction = Math.random() > 0.5 ? '50px' : '-50px';
+        emojiElement.style.setProperty('--direction', direction);
+        // Добавляем эмодзи на страницу
+        document.body.appendChild(emojiElement);
+        // Удаляем эмодзи после завершения анимации
+        emojiElement.addEventListener('animationend', () => {
+            emojiElement.remove();
+        });
+
+        // Разблокируем обработку очереди
+        isProcessingQueue = false;
+
+        // Если в очереди еще есть касания, продолжаем обработку
+        if (touchQueue.length > 0) {
+            requestAnimationFrame(processTouchQueue);
+        }
+    }
+
     // Обработчик для мультитача
     document.addEventListener('touchstart', (event) => {
         // Проходим по всем касаниям
@@ -304,31 +352,11 @@
                 // Отмечаем касание как обработанное
                 processedTouches.add(touchId);
 
-                // Увеличиваем счетчик
-                count += 1;
-                energy -= 1; // Отнимаем 1 единицу энергии за касание
-                // Обновляем текст счетчика с форматированием числа
-                document.getElementById('counter').textContent = formatNumber(count);
-                // Обновляем прогресс-бар
-                updateEnergyBar();
+                // Добавляем касание в очередь
+                touchQueue.push({ clientX, clientY });
 
-                // Создаем новый элемент для эмодзи
-                const emojiElement = document.createElement('div');
-                emojiElement.classList.add('emoji');
-                // Выбираем случайное эмодзи из массива
-                emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                // Устанавливаем позицию эмодзи
-                emojiElement.style.left = `${clientX}px`;
-                emojiElement.style.top = `${clientY}px`;
-                // Определяем направление движения (слева или справа)
-                const direction = Math.random() > 0.5 ? '50px' : '-50px';
-                emojiElement.style.setProperty('--direction', direction);
-                // Добавляем эмодзи на страницу
-                document.body.appendChild(emojiElement);
-                // Удаляем эмодзи после завершения анимации
-                emojiElement.addEventListener('animationend', () => {
-                    emojiElement.remove();
-                });
+                // Начинаем обработку очереди
+                processTouchQueue();
             }
         });
     });
