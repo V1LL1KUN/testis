@@ -251,7 +251,7 @@
 </div>
 </div>
 <script>
-    // Массив с космическими эмодзи
+// Массив с космическими эмодзи
 const emojis = ['⚡', '🔥'];
 // Инициализация счетчика
 let count = 32000;
@@ -302,29 +302,8 @@ function processTouchQueue() {
     // Обновляем прогресс-бар
     updateEnergyBar();
 
-    // Создаем новый элемент для эмодзи
-    const emojiElement = document.createElement('div');
-    emojiElement.classList.add('emoji');
-    // Выбираем случайное эмодзи из массива
-    emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    // Устанавливаем позицию эмодзи
-    emojiElement.style.left = `${clientX}px`;
-    emojiElement.style.top = `${clientY}px`;
-    // Определяем направление движения (слева или справа)
-    const direction = Math.random() > 0.5 ? '50px' : '-50px';
-    emojiElement.style.setProperty('--direction', direction);
-
-    // Принудительный перезапуск анимации через изменение animation-name
-    emojiElement.style.animationName = 'none'; // Отключаем анимацию
-    void emojiElement.offsetWidth; // Триггер перерисовки
-    emojiElement.style.animationName = ''; // Возвращаем анимацию
-
-    // Добавляем эмодзи на страницу
-    document.body.appendChild(emojiElement);
-    // Удаляем эмодзи после завершения анимации
-    emojiElement.addEventListener('animationend', () => {
-        emojiElement.remove();
-    });
+    // Перезапуск анимации монеты
+    resetCoinAnimation();
 
     // Разблокируем обработку очереди
     isProcessingQueue = false;
@@ -333,6 +312,14 @@ function processTouchQueue() {
     if (touchQueue.length > 0) {
         requestAnimationFrame(processTouchQueue);
     }
+}
+
+// Функция для перезапуска анимации монеты
+function resetCoinAnimation() {
+    // Сбрасываем анимацию
+    coinElement.style.animation = 'none';
+    void coinElement.offsetWidth; // Триггер перерисовки
+    coinElement.style.animation = ''; // Возвращаем анимацию
 }
 
 // Обработчик для мультитача
