@@ -275,11 +275,35 @@
         document.getElementById('current-energy').textContent = energy;
     }
 
+    // Получаем элемент монетки
+    const coinElement = document.querySelector('.coin');
+
+    // Словарь для отслеживания обработанных касаний
+    const processedTouches = new Set();
+
     // Обработчик для мультитача
     document.addEventListener('touchstart', (event) => {
         // Проходим по всем касаниям
         Array.from(event.touches).forEach((touch) => {
-            if (energy > 0) {
+            const touchId = touch.identifier; // Уникальный ID касания
+
+            // Проверяем, не было ли это касание уже обработано
+            if (processedTouches.has(touchId)) return;
+
+            // Проверяем, находится ли касание внутри монетки
+            const { clientX, clientY } = touch;
+            const coinRect = coinElement.getBoundingClientRect(); // Получаем размеры и позицию монетки
+
+            const isInsideCoin =
+                clientX >= coinRect.left &&
+                clientX <= coinRect.right &&
+                clientY >= coinRect.top &&
+                clientY <= coinRect.bottom;
+
+            if (isInsideCoin && energy > 0) {
+                // Отмечаем касание как обработанное
+                processedTouches.add(touchId);
+
                 // Увеличиваем счетчик
                 count += 1;
                 energy -= 1; // Отнимаем 1 единицу энергии за касание
@@ -287,9 +311,6 @@
                 document.getElementById('counter').textContent = formatNumber(count);
                 // Обновляем прогресс-бар
                 updateEnergyBar();
-
-                // Получаем координаты касания
-                const { clientX, clientY } = touch;
 
                 // Создаем новый элемент для эмодзи
                 const emojiElement = document.createElement('div');
@@ -309,6 +330,13 @@
                     emojiElement.remove();
                 });
             }
+        });
+    });
+
+    // Очищаем обработанные касания при завершении касания
+    document.addEventListener('touchend', (event) => {
+        Array.from(event.changedTouches).forEach((touch) => {
+            processedTouches.delete(touch.identifier); // Удаляем ID завершенного касания
         });
     });
 
