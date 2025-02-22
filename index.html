@@ -334,7 +334,7 @@
     return num.toLocaleString();
   }
 
-  // Обновление значения энергии в прогресс-баре
+   // Обновление значения энергии в прогресс-баре
   function updateEnergyBar() {
     const energyBar = document.getElementById('energy-bar');
     const energyBarTail = document.getElementById('energy-bar-tail');
@@ -350,37 +350,47 @@
     document.getElementById('current-energy').textContent = energy;
   }
 
- // Добавляем обработчик клика на монету
+  // Добавляем обработчик клика на монету
   document.querySelector('.coin').addEventListener('click', (event) => {
     if (energy > 0) {
       // Увеличиваем счетчик
       count += 1;
       energy -= 1; // Отнимаем 1 единицу энергии за клик
+
       // Обновляем текст счетчика с форматированием числа
       document.getElementById('counter').textContent = formatNumber(count);
+
       // Обновляем прогресс-бар
       updateEnergyBar();
+
       // Получаем координаты клика
       const { clientX, clientY } = event;
+
       // Создаем новый элемент для эмодзи
       const emojiElement = document.createElement('div');
       emojiElement.classList.add('emoji');
+
       // Выбираем случайное эмодзи из массива
       emojiElement.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
       // Устанавливаем позицию эмодзи
-      emojiElement.style.left = ${clientX}px;
-      emojiElement.style.top = ${clientY}px;
+      emojiElement.style.left = `${clientX}px`;
+      emojiElement.style.top = `${clientY}px`;
+
       // Определяем направление движения (слева или справа)
       const direction = Math.random() > 0.5 ? '50px' : '-50px';
       emojiElement.style.setProperty('--direction', direction);
+
       // Добавляем эмодзи на страницу
       document.body.appendChild(emojiElement);
+
       // Удаляем эмодзи после завершения анимации
       emojiElement.addEventListener('animationend', () => {
         emojiElement.remove();
       });
     }
   });
+
   // Восстановление энергии каждые 3 секунды
   setInterval(() => {
     if (energy < 5000) {
@@ -388,8 +398,9 @@
       updateEnergyBar();
     }
   }, 3000);
+
   // Инициализация прогресс-бара
   updateEnergyBar();
-</script> 
+</script>
 </body>
 </html>
