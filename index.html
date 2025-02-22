@@ -313,6 +313,14 @@
         // Определяем направление движения (слева или справа)
         const direction = Math.random() > 0.5 ? '50px' : '-50px';
         emojiElement.style.setProperty('--direction', direction);
+
+        // Принудительный перезапуск анимации
+        void emojiElement.offsetWidth; // Триггер перерисовки
+        emojiElement.classList.remove('emoji'); // Удаляем класс
+        setTimeout(() => {
+            emojiElement.classList.add('emoji'); // Возвращаем класс
+        }, 0);
+
         // Добавляем эмодзи на страницу
         document.body.appendChild(emojiElement);
         // Удаляем эмодзи после завершения анимации
