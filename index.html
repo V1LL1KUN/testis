@@ -119,8 +119,8 @@
         }
         /* Миниатюрная монетка слева от счетчика */
         .mini-coin {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background-color: rgba(0, 0, 0, 0.3);
             border-radius: 50%;
             display: flex;
@@ -131,7 +131,7 @@
         }
         /* Эмодзи внутри миниатюрной монетки */
         .mini-coin-text {
-            font-size: 20px;
+            font-size: 25px;
             color: #ffffff;
             text-shadow:
                     0 0 2px #ffffff,
@@ -255,6 +255,14 @@
             display: flex; /* Кнопки располагаются горизонтально */
             z-index: 15; /* Чтобы кнопки были поверх других элементов */
         }
+        /* Убираем стандартное выделение при клике */
+        button,
+        .button {
+            -webkit-tap-highlight-color: transparent; /* Убирает синее подсвечивание на телефонах */
+            outline: none; /* Убирает рамку при фокусе */
+            user-select: none; /* Запрещает выделение текста */
+        }
+
         /* Общий стиль для всех кнопок */
         .button {
             width: 66px; /* Ширина кнопки */
@@ -265,11 +273,19 @@
             justify-content: center;
             align-items: center;
             cursor: pointer; /* Указатель мыши меняется на "руку" */
-            transition: background-color 0.3s ease; /* Плавная анимация при наведении */
+            transition: transform 0.1s ease, background-color 0.2s ease; /* Плавная анимация */
+            border: none; /* Убираем границы */
+            border-radius: 20px; /* Закругленные углы */
         }
-        /* Эффект при наведении на кнопку */
+
+        /* Анимация при наведении */
         .button:hover {
             background-color: rgba(138, 43, 226, 0.7); /* Становится менее прозрачным */
+        }
+
+        /* Анимация при нажатии */
+        .button:active {
+            background-color: rgba(138, 43, 226, 0.9); /* Цвет становится ярче */
         }
         /* Иконка внутри кнопки */
         .button-icon {
@@ -332,8 +348,8 @@
         }
 
         .balance-value .circle {
-            width: 65px; /* Размер круга */
-            height: 65px;
+            width: 60px; /* Размер круга */
+            height: 60px;
             background-color: rgba(0, 0, 0, 0.3);
             border-radius: 50%; /* Форма круга */
             display: flex;
@@ -343,7 +359,7 @@
         }
 
         .balance-value .circle-text {
-            font-size: 30px; /* Размер эмодзи внутри круга */
+            font-size: 25px; /* Размер эмодзи внутри круга */
             color: #FFFFFF;
         }
 
@@ -369,6 +385,7 @@
             margin-bottom: 15px;
             text-align: left;
             width: 90%;
+            transform: translateX(-4%);
         }
 
         /* Интерфейс Boost */
@@ -389,6 +406,7 @@
             box-sizing: border-box;
             z-index: 100;
             display: none; /* Скрыт по умолчанию */
+            overflow: hidden;
             overflow-y: auto; /* Включение прокрутки по вертикали */
         }
 
@@ -397,7 +415,7 @@
             display: flex;
             gap: 15px; /* Расстояние между блоками */
             margin-bottom: 20px;
-            width: 90%;
+            width: 97.5%;
         }
 
         .booster-block {
@@ -440,7 +458,7 @@
             border-radius: 20px; /* Мягкие углы */
             padding: 20px;
             box-sizing: border-box;
-            width: 90%;
+            width: 120%;
             max-width: 400px;
         }
 
