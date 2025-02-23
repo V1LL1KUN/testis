@@ -327,6 +327,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+            margin-left: -50px; /* Сдвигаем блок левее */
         }
 
         .balance-value .circle {
@@ -341,7 +342,7 @@
         }
 
         .balance-value .circle-text {
-            font-size: 30px; /* Размер эмодзи */
+            font-size: 30px; /* Размер эмодзи внутри круга */
             color: #FFFFFF;
         }
 
@@ -401,17 +402,17 @@
         .booster-block {
             background-color: rgba(138, 43, 226, 0.3);
             border-radius: 20px; /* Мягкие углы */
-            padding: 10px; /* Уменьшенные отступы для высоты */
+            padding: 10px; /* Отступы */
             box-sizing: border-box;
             display: flex;
             flex-direction: column; /* Вертикальное расположение */
             align-items: flex-start; /* Выравнивание по левому краю */
-            width: 48%; /* Возвращена исходная длина */
+            width: 50%; /* Увеличена длина блока */
             position: relative; /* Для позиционирования эмодзи */
         }
 
         .booster-block .booster-name {
-            font-size: 18px;
+            font-size: 16px; /* Уменьшенный размер шрифта */
             font-weight: bold;
             color: #FFFFFF;
             margin-bottom: 5px; /* Отступ между текстом и таймером */
@@ -734,6 +735,13 @@
 
     document.getElementById('earn-button').addEventListener('click', () => {
         alert('Кнопка Earn нажата!');
+    });
+    // Возврат на страницу с игрой при нажатии на баланс
+    document.querySelector('.balance-value').addEventListener('click', () => {
+        const boostContainer = document.getElementById('boost-container');
+        if (boostContainer.style.display === 'flex') {
+            boostContainer.style.display = 'none'; // Скрываем интерфейс Boost
+        }
     });
 </script>
 </body>
