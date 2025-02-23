@@ -278,14 +278,16 @@
             border-radius: 20px; /* Закругленные углы */
         }
 
-        /* Анимация при наведении */
-        .button:hover {
-            background-color: rgba(138, 43, 226, 0.7); /* Становится менее прозрачным */
-        }
-
-        /* Анимация при нажатии */
+        /* Анимация нажатия (работает везде) */
         .button:active {
             background-color: rgba(138, 43, 226, 0.9); /* Цвет становится ярче */
+        }
+
+        /* Анимация наведения (только на ПК) */
+        @media (hover: hover) and (pointer: fine) {
+            .button:hover {
+                background-color: rgba(138, 43, 226, 0.7); /* Становится менее прозрачным */
+            }
         }
         /* Иконка внутри кнопки */
         .button-icon {
@@ -458,7 +460,7 @@
             border-radius: 20px; /* Мягкие углы */
             padding: 20px;
             box-sizing: border-box;
-            width: 98%;
+            width: 97%;
             max-width: 400px;
         }
 
